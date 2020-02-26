@@ -1,34 +1,20 @@
 library(readxl)
-hud<-read_excel("~/Downloads/HUD/data/Data_Level2_HUD_HUDPrograms_2018.xlsx")
-hud<-hud[,-1]
+hud<-read_excel("~/Downloads/HUD/data/original/Data_Level2_HUD_HUDPrograms_2018.xlsx")
+#drop columns with unique identifier, redundant variables, and rounded values
+hud <- hud[,-c(1, 6:12, 15:18, 25, 26, 37:40)]
 attach(hud)
 
 set.seed(12345)
+
+#split into training and testing sets
 index<-sample(1:nrow(hud), 0.7*nrow(hud))
 training<-hud[index,]
 test<-hud[-index,]
 
 library(nnet)
-#multinomial logistic regression model with chosen predictors
-tmodel<-multinom(pgm_type_edited ~ 
-                   HSHD_MBR_TOTAL_CNT+
-                   TOTAL_DPNDNT_CNT+
-                   TOTAL_ANNL_INCM_AMNT+
-                   HEAD_GNDR_CD+
-                   HEAD_AGE_YR_CNT+
-                   HEAD_ELDLY_INDR+
-                   HEAD_RACE_CD+
-                   HEAD_ETHNCY_CD+
-                   DSBLD_CHLDRN_CNT+
-                   CHLDRN_MBR_CNT+
-                   GROSS_RENT_AMNT+
-                   TOTAL_FMLY_CRBTN_AMNT+
-                   PVRTY_PRCNT+
-                   MNRTY_PRCNT+
-                   BLACK_PRCNT+
-                   HISPANIC_PRCNT+
-                   WHITE_PRCNT
-                 , data=training)
+
+#multinomial logistic regression model
+tmodel <- multinom(pgm_type_edited ~ ., data=training)
 summary(tmodel)
 
 z <- summary(tmodel)$coefficients/summary(tmodel)$standard.errors
@@ -36,6 +22,7 @@ z <- summary(tmodel)$coefficients/summary(tmodel)$standard.errors
 p <- (1 - pnorm(abs(z), 0, 1)) * 2
 p
 
+#make predictions on the test set about program type
 predicted_scores<-predict(tmodel, test, "probs")
 predicted_class<-predict(tmodel, test)
 
