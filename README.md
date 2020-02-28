@@ -6,7 +6,7 @@ The U.S. Department of Housing and Urban Development (HUD) provides annual renta
 
 Our analysis aims to answer the following research questions:
 * How have the household characteristics of HUD programs changed from 2009 to 2018?
-* Are certain groups more attracted to some HUD programs than others?
+* Can we predict program type based on demographics and external variables?
 * Why is housing important?
 * How is housing important to sustainability?
-* How can housing be made accessible?
+* What can HUD do to improve these programs?
