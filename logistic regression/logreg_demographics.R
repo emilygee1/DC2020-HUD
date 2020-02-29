@@ -27,8 +27,13 @@ p
 predicted_scores<-predict(tmodel, test, "probs")
 predicted_class<-predict(tmodel, test)
 
-#confusion matrix and accuracy
+#confusion matrix and performance measures
 library(MLmetrics)
 
 ConfusionMatrix(predicted_class, test$pgm_type_edited)
-Accuracy(predicted_class, test$pgm_type_edited)
+
+acc <- Accuracy(predicted_class, test$pgm_type_edited)
+acc <- format(round(acc, 3), nsmall = 3)
+recall <- Sensitivity(test$pgm_type_edited, predicted_class)
+recall <- format(round(recall, 3), nsmall = 3)
+cat('Accuracy: ', acc, '\n', 'Recall: ', recall)
