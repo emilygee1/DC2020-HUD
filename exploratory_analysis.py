@@ -1,6 +1,7 @@
 import statistics as stats
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Load datasets for 2009, 2014, 2018
 df09 = pd.read_excel('~/Downloads/HUD/data/Data_Level2_HUD_HUDPrograms_2009.xlsx')
@@ -66,3 +67,21 @@ df3 = df3.drop(['Year',
 df1.describe()
 df2.describe()
 df3.describe()
+
+
+
+# Closer look at some significant predictors
+
+df_list2 = [df1, df2, df3]
+variables = ['HEAD_ELDLY_INDR', 'HEAD_GNDR_CD', 'HEAD_RACE_CD', 'CNTRL_CITY_CD']
+program_types = ['Public housing', 'Housing choice voucher', 'Multi-family']
+i = 0
+
+for df in df_list2:
+    print(program_types[i])
+    for var in variables:
+        print(df[var].value_counts(normalize=True), end ='\n\n')
+
+    med_hispanic = df['HISPANIC_PRCNT'].median()
+    print('Median Hispanic Percentage: %.2f' % med_hispanic, end = '\n\n\n')
+    i += 1
